@@ -142,3 +142,36 @@ DataSource hikariDataSource() {
 > Essa configuração é opcional, ao configurar os dados dentro do `application.yml` já irá estabelecer uma conexão com o banco de dados utilizando o HikariCP. 
 
 Podemos ver a documentação do HikariCP [aqui](https://github.com/brettwooldridge/HikariCP).
+
+## Mapeamento das tabelas
+
+```java
+@Table(
+	schema = "public" // se caso tenha mais de 1 schema, podemos definir outro (opcional)
+)
+public class Livro {
+	@Column(
+		// Valores presentes na tabela
+		precision = 18, // até 18 numeros
+		scale = 2 // 2 numeros decimais
+	)
+	private BigDecimal preco;
+
+	@Enumerated(EnumType.STRING) // necessária para informar o tipo de dado que será armazenado
+	@Column(name = "genero", length = 30, nullable = false)
+	private GeneroLivro genero;
+
+	@ManyToOne // Pode ter muitos livros para 1 autor
+	@JoinColumn(name = "id_autor") // criar uma na nova coluna
+	private Autor autor; 
+}
+
+@Table(
+	schema = "public" // se caso tenha mais de 1 schema, podemos definir outro (opcional)
+)
+public class Autor {
+	@OneToManny(mappedBy = "autor")
+	private List<Livro> livros; 
+}
+
+```
