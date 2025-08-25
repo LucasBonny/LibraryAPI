@@ -1,8 +1,22 @@
 # LibraryAPI
 
+## Sumário
+
+- [Novos conhecimentos](#novos-conhecimentos)
+- [Banco de dados PostgreSQL com Docker](#banco-de-dados-postgresql-com-docker)
+	- [Explicação do comando](#explicação-do-comando)
+- [PGAdmin4 Client com Docker](#pgadmin4-client-com-docker)
+- [Comunicação entre containers](#comunicação-entre-containers)
+	- [Criando a network](#criando-a-network)
+	- [Criando containers com a network](#criando-containers-com-a-network)
+- [Criando scripts para o banco de dados](#criando-scripts-para-o-banco-de-dados)
+- [Configurando o datasource para o banco de dados](#configurando-o-datasource-para-o-banco-de-dados)
+- [Criando pool de conexão com o banco de dados](#criando-pool-de-conexão-com-o-banco-de-dados)
+
 ## Novos conhecimentos
 
-- [ ] Docker básico
+- [x] Docker básico
+- [x] HikariCP básico
 
 ## Banco de dados PostgreSQL com Docker
 
@@ -79,7 +93,7 @@ select * from tb_autor;
 
 select * from tb_livro;
 ```
-## Conexão com o banco de dados
+## Configurando o datasource para o banco de dados
 Será necessário alterar o arquivo `application.yml` para inserir as informações do banco de dados dentro da aplicação.
 ```yml
 # application.yml
@@ -91,3 +105,40 @@ spring:
     driver-class-name: org.postgresql.Driver
 ```
 Com essa configuração a conexão foi estabilizada com o banco.
+
+## Criando pool de conexão com o banco de dados
+
+Para isso será necessário criar um bean para instanciar a conexão e com isso podemos gerenciar o que exatamente esse pool de conexão terá de permissão.
+
+```java
+@Value("${spring.datasource.url}")
+String url;
+@Value("${spring.datasource.username}")
+String username;
+@Value("${spring.datasource.password}")
+String password;
+@Value("${spring.datasource.driver-class-name}")
+String driver;
+
+@Bean
+DataSource hikariDataSource() {
+	HikariConfig config = new HikariConfig();
+	config.setJdbcUrl(url);
+	config.setUsername(username);
+	config.setPassword(password);
+	config.setDriverClassName(driver);
+
+	config.setMaximumPoolSize(10); // Liberar no máximo 10 conexões
+	config.setMinimumIdle(1); // Tamanho inicial com o pool de 1 até 10 conexões
+	config.setPoolName("nome-da-db"); // (opcional) nome que irá aparecer no console
+	config.setMaxLifetime(600000); // durar até 10 min a conexão
+	config.setConnectionTimeout(150000);  // tempo para conseguir uma conexão
+	config.setConnectionTestQuery("select 1"); // teste de conexão 
+
+	return new HikariDataSource(config);
+}
+```
+> [!IMPORTANT]
+> Essa configuração é opcional, ao configurar os dados dentro do `application.yml` já irá estabelecer uma conexão com o banco de dados utilizando o HikariCP. 
+
+Podemos ver a documentação do HikariCP [aqui](https://github.com/brettwooldridge/HikariCP).
