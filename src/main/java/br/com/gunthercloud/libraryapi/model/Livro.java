@@ -19,7 +19,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "tb_autor", schema = "public")
+@Table(name = "tb_livro", schema = "public")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

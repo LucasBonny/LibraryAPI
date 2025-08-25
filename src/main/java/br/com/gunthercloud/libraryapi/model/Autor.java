@@ -33,6 +33,9 @@ public class Autor {
 	private String nome;
 	
 	@Column(name = "nacionalidade", length = 50, nullable = false)
+	private LocalDate nacionalidade;
+	
+	@Column(name = "data_nascimento")
 	private LocalDate dataNascimento;
 	
 	@OneToMany(mappedBy = "autor")

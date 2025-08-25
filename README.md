@@ -12,6 +12,8 @@
 - [Criando scripts para o banco de dados](#criando-scripts-para-o-banco-de-dados)
 - [Configurando o datasource para o banco de dados](#configurando-o-datasource-para-o-banco-de-dados)
 - [Criando pool de conexão com o banco de dados](#criando-pool-de-conexão-com-o-banco-de-dados)
+- [Mapeamento das tabelas](#mapeamento-das-tabelas)
+- [Criando tabelas no banco de dados automático](#criando-tabelas-no-banco-de-dados-automático)
 
 ## Novos conhecimentos
 
@@ -175,3 +177,15 @@ public class Autor {
 }
 
 ```
+
+## Criando tabelas no banco de dados automático
+Para fazer a criação das tabelas de acordo com o mapeamento feito dentro das classes, será necessário abrir o `application.yml` e colocar: 
+```yml
+spring:
+  jpa:
+    show-sql: true # Mostrar os SQL executados
+    hibernate:
+      ddl-auto: update # Gerar e manter as tabelas no DB
+```
+> [!IMPORTANT]
+> Não devemos usar o DDL(Data Definiton Language) em produção pois podemos afetar o serviço em produção.
