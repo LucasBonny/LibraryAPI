@@ -9,12 +9,13 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 @Entity
 @Table(name = "tb_autor", schema = "public")
@@ -22,6 +23,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 public class Autor {
 
 	@Id
@@ -33,11 +35,12 @@ public class Autor {
 	private String nome;
 	
 	@Column(name = "nacionalidade", length = 50, nullable = false)
-	private LocalDate nacionalidade;
+	private String nacionalidade;
 	
 	@Column(name = "data_nascimento")
 	private LocalDate dataNascimento;
 	
-	@OneToMany(mappedBy = "autor")
+	// @OneToMany(mappedBy = "autor")
+	@Transient
 	private List<Livro> livros;
 }
