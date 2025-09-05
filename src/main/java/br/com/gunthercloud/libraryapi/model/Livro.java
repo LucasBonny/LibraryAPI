@@ -4,25 +4,18 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.UUID;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Entity
 @Table(name = "tb_livro", schema = "public")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString(exclude = "autor")
 public class Livro {
 	
 	@Id
@@ -49,4 +42,5 @@ public class Livro {
 	@ManyToOne
 	@JoinColumn(name = "id_autor")
 	private Autor autor;
+
 }

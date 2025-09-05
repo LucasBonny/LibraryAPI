@@ -1,16 +1,11 @@
 package br.com.gunthercloud.libraryapi.model;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import jakarta.persistence.Transient;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,7 +18,7 @@ import lombok.ToString;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
+@ToString(exclude = "livros")
 public class Autor {
 
 	@Id
@@ -40,7 +35,6 @@ public class Autor {
 	@Column(name = "data_nascimento")
 	private LocalDate dataNascimento;
 	
-	// @OneToMany(mappedBy = "autor")
-	@Transient
+	@OneToMany(mappedBy = "autor",cascade = CascadeType.ALL)
 	private List<Livro> livros;
 }
